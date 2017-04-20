@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="vieja.css">
+</head>
+<body>
+	<div class="botones">
+		<button id="X" class="button"> X </button> 
+		<button id="O" class="button"> O </button> 
+	</div> 
+	<div id = "tablero" class = "tablero">
+		<div class="fila borde">
+			<div id="1" class=casilla></div>
+			<div id="2" class=casilla></div>
+			<div id="3" class=casilla></div>
+		</div>
+		<div class="fila borde">
+			<div id="4" class=casilla></div>
+			<div id="5" class=casilla></div>
+			<div id="6" class=casilla></div>
+		</div>
+		<div class="fila">
+			<div id="7" class=casilla></div>
+			<div id="8" class=casilla></div>
+			<div id="9" class=casilla></div>
+		</div>
+	</div>
+	<div class="buttonOK">
+		<button id="OK" class="button hidden">OK</button>
+	</div>
+	<script>
+		document.getElementById("X").addEventListener("click",ticTacToe);
+		document.getElementById("O").addEventListener("click",ticTacToe);
+		var playerChoice;
+		var computerChoice = "O"
+
+		var filled = []
+
+		var chances = [
+			[1,2,3,0,0],
+			[4,5,6,0,0],
+			[7,8,9,0,0],
+			[1,4,7,0,0],
+			[2,5,8,0,0],
+			[3,6,9,0,0],
+			[1,5,9,0,0],
+			[3,5,7,0,0]
+		];
+
+		function ticTacToe(ev){
+			const option = ev.currentTarget.id;
+			playerChoice = option;
+			if(playerChoice == "O"){
+				computerChoice = "X"
+			}
+			removeXoYListeners();
+			if(computerChoice == "X"){
+				setTimeout(function(){setComputerBox()},1000);
+			}else{
+				setNextTurnListeners();	
+			}
+		}
+
+		function removeXoYListeners(){
+			document.getElementById("X").removeEventListener("click",ticTacToe);
+			document.getElementById("O").removeEventListener("click",ticTacToe);
+		}
+
+		function setNextTurnListeners(){
+			document.getElementById("tablero").addEventListener("click",setPlayerBox);
+		}
+
+		function setPlayerBox(ev){
+			let boxID = ev.target.id;
+			document.getElementById("tablero").removeEventListener("click",setPlayerBox);
+			document.getElementById(boxID).innerHTML = playerChoice;
+			filled.push(parseInt(boxID))
+			addToPlayerCount(boxID)
+			let winner =checkWinner()
+			if (winner.result == true) {
+				for(let i = 0;i<3;i++){
+					document.getElementById(winner.line[i]).classList.add('winner')
+				}
+				setTimeout(function(){alert("Ganaste!!, si deseas jugar de nuevo, haz click en OK")},1000)
+				document.getElementById("OK").classList.remove('hidden')
+				document.getElementById("OK").addEventListener("click",startFresh)
+			}else{
+				setTimeout(function() {setComputerBox()}, 1000)
+			}
+		}
+
+		function setComputerBox(){
+			let boxID = Math.floor(Math.random()*9)+1
+			if (!filled.includes(boxID)){
+				document.getElementById(boxID).innerHTML = computerChoice
+				filled.push(boxID)
+				addToComputerCount(boxID)
+				let winner =checkWinner()
+				if (winner.result == true) {
+					for(let i = 0;i<3;i++){
+						document.getElementById(winner.line[i]).classList.add('winner')
+					}
+					setTimeout(function(){alert("Perdiste!!, si deseas jugar de nuevo, haz click en OK")},1000)
+					document.getElementById("OK").classList.remove('hidden')
+					document.getElementById("OK").addEventListener("click",startFresh)
+				}else{
+					setTimeout(function() {setNextTurnListeners()}, 1000)
+				}
+			}else{
+				setComputerBox()
+			}
+		}
+
+		function addToPlayerCount(boxID){
+			for(let line of chances){
+				if(line.includes(parseInt(boxID))){
+					line[3] += 10
+				}
+			}
+		}
+
+		function addToComputerCount(boxID){
+			for(let line of chances){
+				if(line.includes(boxID)){
+					line[4] += 10
+				}
+			}
+		}
+
+		function checkWinner(){
+			for(let line of chances){
+				if(line[3] == 30 || line[4] == 30){
+					return {result:true,line:line}
+				}
+			}
+			return false
+		}	
+
+		function startFresh(){
+			window.location.reload()
+		}
+	</script>
+</body>
+</html>

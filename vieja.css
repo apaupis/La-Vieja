@@ -1,0 +1,65 @@
+body {
+  background: black;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  justify-content: center;
+  margin: 0;
+}
+
+.botones{
+	margin:auto;
+	margin-top: 20px;
+	width:30%;
+	padding: 20px 0;
+	display: flex;
+	justify-content: space-between;
+}
+
+.button{
+	padding: 10px 50px;
+	border: 5px solid yellow;
+	border-radius: 5px;
+	font-size: 30px;
+	background: black;
+	color:yellow;
+}
+
+.hidden{
+	visibility: hidden;
+}
+
+.tablero{
+	width: 100%;
+	margin-top: 40px;
+	display: flex;
+  	flex-direction: column;
+  	justify-content: center;
+}
+
+.fila{
+	display: flex;
+	width:360px;
+	background: yellow;
+	justify-content: space-between;
+	margin: auto;
+}
+
+.fila.borde{
+	border-bottom: 17px solid yellow;
+}
+.casilla{
+	height: 110px;
+	width: 110px;
+	background: black;
+	font-size: 100px;
+	text-align: center;
+}
+
+.casilla.winner{
+	color:red;
+}
+
+.buttonOK{
+	text-align:center;
+	padding-top: 60px
+}
